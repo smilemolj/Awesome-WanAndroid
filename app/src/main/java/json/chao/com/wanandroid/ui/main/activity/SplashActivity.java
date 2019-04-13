@@ -43,6 +43,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     protected void onDestroy() {
+//        取消了动画
         cancelAnimation();
         super.onDestroy();
     }
@@ -54,6 +55,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     protected void initToolbar() {
+//        第一次进入不进入if方法
         if (!WanAndroidApp.isFirstRun) {
             jumpToMain();
             return;
