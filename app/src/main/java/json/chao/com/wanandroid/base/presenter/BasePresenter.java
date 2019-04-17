@@ -28,6 +28,7 @@ public class BasePresenter<T extends AbstractView> implements AbstractPresenter<
         this.mView = view;
     }
 
+//    这里的意思是，如果activity关闭了，compositeDisposable也清除，防止内存泄漏，
     @Override
     public void detachView() {
         this.mView = null;
@@ -37,6 +38,22 @@ public class BasePresenter<T extends AbstractView> implements AbstractPresenter<
     }
 
     @Override
+//    这段参数作为disposable被传了过来
+//            RxView.clicks(mLoginBtn)
+//            .throttleFirst(Constants.CLICK_TIME_AREA, TimeUnit.MILLISECONDS)
+//                .filter(new Predicate<Object>() {
+//        @Override
+//        public boolean test(Object o) throws Exception {
+//            return mPresenter != null;
+//        }
+//    })
+//            .subscribe(new Consumer<Object>() {
+//        @Override
+//        public void accept(Object o) throws Exception {
+//            mPresenter.getLoginData(mAccountEdit.getText().toString().trim(),
+//                    mPasswordEdit.getText().toString().trim());
+//        }
+//    })
     public void addRxBindingSubscribe(Disposable disposable) {
         addSubscribe(disposable);
     }
@@ -80,6 +97,22 @@ public class BasePresenter<T extends AbstractView> implements AbstractPresenter<
         if (compositeDisposable == null) {
             compositeDisposable = new CompositeDisposable();
         }
+        //    这段参数作为disposable被传了过来
+//            RxView.clicks(mLoginBtn)
+//            .throttleFirst(Constants.CLICK_TIME_AREA, TimeUnit.MILLISECONDS)
+//                .filter(new Predicate<Object>() {
+//        @Override
+//        public boolean test(Object o) throws Exception {
+//            return mPresenter != null;
+//        }
+//    })
+//            .subscribe(new Consumer<Object>() {
+//        @Override
+//        public void accept(Object o) throws Exception {
+//            mPresenter.getLoginData(mAccountEdit.getText().toString().trim(),
+//                    mPasswordEdit.getText().toString().trim());
+//        }
+//    })
         compositeDisposable.add(disposable);
     }
 

@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 import json.chao.com.wanandroid.app.Constants;
 import json.chao.com.wanandroid.base.activity.BaseActivity;
 import json.chao.com.wanandroid.R;
@@ -27,6 +29,7 @@ import json.chao.com.wanandroid.utils.StatusBarUtil;
  * @date 2018/2/26
  */
 
+//loginactivity继承baseactivity,实现了loginview的接口
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View {
 
     @BindView(R.id.login_group)
@@ -78,20 +81,27 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     private void startRegisterPager() {
         ActivityOptions options = ActivityOptions.makeScaleUpAnimation(mRegisterBtn,
-                mRegisterBtn.getWidth() / 2,
-                mRegisterBtn.getHeight() / 2,
-                0 ,
-                0);
+                mRegisterBtn.getWidth() / 2, mRegisterBtn.getHeight() / 2, 0, 0);
         startActivity(new Intent(this, RegisterActivity.class), options.toBundle());
     }
 
     private void subscribeLoginClickEvent() {
-        mPresenter.addRxBindingSubscribe(RxView.clicks(mLoginBtn)
-                .throttleFirst(Constants.CLICK_TIME_AREA, TimeUnit.MILLISECONDS)
-                .filter(o -> mPresenter != null)
-                .subscribe(o -> mPresenter.getLoginData(
-                        mAccountEdit.getText().toString().trim(),
-                        mPasswordEdit.getText().toString().trim())));
+//        mpreserter 是一个T类型，是父类baseactivity的一个属性,把后面一大段参数传到basepresenter的addrxbindingsubscribe()中，
+//        这里我们需要mpresenter,先跳转过去，
+        mPresenter.addRxBindingSubscribe(RxView.clicks(mLoginBtn).throttleFirst(Constants.CLICK_TIME_AREA, TimeUnit.MILLISECONDS).filter(new Predicate<Object>() {
+            @Override
+            public boolean test(Object o) throws Exception {
+                return mPresenter != null;
+            }
+        }).subscribe(new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+//        观察者观察被观察者的点击动作，消费事件时，拿到控件上的用户名密码传参数过去执行登录逻辑
+//        mpreserter 是一个T类型，是父类baseactivity的一个属性,
+                mPresenter.getLoginData(mAccountEdit.getText().toString().trim(),
+                        mPasswordEdit.getText().toString().trim());
+            }
+        }));
     }
 
 }

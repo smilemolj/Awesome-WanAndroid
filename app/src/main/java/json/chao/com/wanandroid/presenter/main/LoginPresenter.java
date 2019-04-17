@@ -30,6 +30,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     }
 
     @Override
+//    控件上的用户名密码传了过来
     public void getLoginData(String username, String password) {
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
             mView.showSnackBar(WanAndroidApp.getInstance().getString(R.string.account_password_null_tint));

@@ -22,12 +22,14 @@ import json.chao.com.wanandroid.utils.CommonUtils;
  * @date 2017/11/28
  */
 
+//  T 继承AbstractPresenter
 public abstract class BaseActivity<T extends AbstractPresenter> extends AbstractSimpleActivity implements
         HasSupportFragmentInjector,
         AbstractView {
 
     @Inject
     DispatchingAndroidInjector<Fragment> mFragmentDispatchingAndroidInjector;
+//    这里使用了dagger2注入
     @Inject
     protected T mPresenter;
 
